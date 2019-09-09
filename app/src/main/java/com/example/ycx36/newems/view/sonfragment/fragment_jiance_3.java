@@ -45,7 +45,7 @@ public class fragment_jiance_3 extends Fragment {
         if (view == null) {
             view = inflater.inflate(R.layout.layout_f_jiance_3, container, false);
             ButterKnife.bind(this,view);
-            startExamination();
+//            startExamination();
         }
         return view;
     }
@@ -68,7 +68,7 @@ public class fragment_jiance_3 extends Fragment {
 //                progressBar13.setProgress(status);
 //                progressBar14.setProgress(status);
             }
-            if (msg.what == 1){
+            if (msg.what == 2){
                 text_tipStatus.setText("检测完成");
                 d2.setText("安全（点击查看详情）");
                 llflag2 = 1;
@@ -90,7 +90,7 @@ public class fragment_jiance_3 extends Fragment {
                     }
                     handler.sendEmptyMessage(0x111);
                     if (status==100){
-                        handler.sendEmptyMessage(1);
+                        handler.sendEmptyMessage(2);
                     }
                 }
             }

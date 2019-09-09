@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.ycx36.newems.R;
 import com.example.ycx36.newems.util.getCarAllBean;
+import com.example.ycx36.newems.util.getCarInfo;
 import com.example.ycx36.newems.util.interface_retrofit;
 import com.example.ycx36.newems.util.requestGetCarAllBean;
 import com.example.ycx36.newems.view.sonfragment.fragment_baogao;
@@ -40,15 +41,19 @@ public class ExaminationActivity extends AppCompatActivity {
     @BindView(R.id.tv_header_centerText) TextView tv_header_centerText;
     FragmentPagerItemAdapter adapter;
 
+    getCarInfo getCarInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examination);
         ButterKnife.bind(this);
-        SharedPreferences pref = getSharedPreferences("UID",MODE_PRIVATE);
-        String value = pref.getString("uid","");
-        if (!value.equals("")){
-            login();
+        getCarInfo = new getCarInfo(this);
+        SharedPreferences pref = getSharedPreferences("username",MODE_PRIVATE);
+        String username = pref.getString("username","");
+        SharedPreferences pref2 = getSharedPreferences("password",MODE_PRIVATE);
+        String password = pref2.getString("password","");
+        if (!username.equals("")){
+            getCarInfo.getCarAllData_save(username,password);
         }else{
             Toast.makeText(this,"你还未登录",Toast.LENGTH_SHORT).show();
             finish();
@@ -86,61 +91,5 @@ public class ExaminationActivity extends AppCompatActivity {
         viewPagerTab.setViewPager(viewPager);
     }
 
-
-    public void login(){
-            requestGetCarAllBean requestGetCarAll = new requestGetCarAllBean();
-            requestGetCarAll.setRequest(new requestGetCarAllBean.RequestBean());
-            requestGetCarAll.getRequest().setCommon(new requestGetCarAllBean.RequestBean.CommonBean());
-            requestGetCarAll.getRequest().getCommon().setAction("getCarAll");      //设置第一参数 "action":"getCarAll"
-            requestGetCarAll.getRequest().getCommon().setReqtime("20190326171001");    //设置第二参数 "reqtime":"20190325180230"
-
-            requestGetCarAll.getRequest().setContent(new requestGetCarAllBean.RequestBean.ContentBean());
-            requestGetCarAll.getRequest().getContent().setId(null);      //设置id
-            requestGetCarAll.getRequest().getContent().setName("admin");   //设置用户名
-            requestGetCarAll.getRequest().getContent().setPassword("admin");  //设置用户密码
-            requestGetCarAll.getRequest().getContent().setPhone("");    //设置手机号
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://120.79.62.86:10003/")
-                    .addConverterFactory(GsonConverterFactory.create())//设置 Json 转换器
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())//RxJava 适配器
-                    .build();
-            interface_retrofit rxjavaService = retrofit.create(interface_retrofit.class);
-            rxjavaService.getCarAll(requestGetCarAll)
-                    .subscribeOn(Schedulers.io())//IO线程加载数据
-                    .observeOn(AndroidSchedulers.mainThread())//主线程显示数据
-                    .subscribe(new Subscriber<getCarAllBean>() {
-                        @Override
-                        public void onCompleted() {
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d("错误          ",e.getMessage());
-                        }
-
-                        @Override
-                        public void onNext(getCarAllBean data) {
-                            if (data.getResponse().getContent() != null) {
-                                //存储信息
-                                saveUserData("UID","uid",data.getResponse().getContent().getUid());
-                                saveUserData("UPDATETIME","updatetime",data.getResponse().getContent().getUpdatetime());
-                                saveUserData("MOTORSPEED","motorspeed",data.getResponse().getContent().getMotorspeed());
-                                saveUserData("MOTOTTORQUE","motortorque",data.getResponse().getContent().getMotortorque());
-                                saveUserData("TOTALCURRENT","totalcurrent",data.getResponse().getContent().getTotalcurrent());
-                                saveUserData("TOTALVOLTAGE","totalvoltage",data.getResponse().getContent().getTotalvoltage());
-                            }else {
-                                //Toast.makeText(ExaminationActivity.this,"内容为空",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-    }
-
-    public void saveUserData(String NAME,String name,String data){
-        SharedPreferences.Editor editor = getSharedPreferences(NAME,MODE_PRIVATE).edit();
-        editor.putString(name,data);
-        editor.apply();
-    }
 
 }

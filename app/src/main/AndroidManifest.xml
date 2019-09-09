@@ -15,6 +15,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/esmapp"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_config"
         android:theme="@style/mNoTitleStyle">
         <activity android:name=".view.activity.activity_TrendAnalysis.activity_rcm"></activity>
         <activity android:name=".view.activity.activity_TrendAnalysis.activity_cpu" />

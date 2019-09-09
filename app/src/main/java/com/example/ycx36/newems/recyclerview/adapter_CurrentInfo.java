@@ -65,21 +65,21 @@ public class adapter_CurrentInfo extends RecyclerView.Adapter<adapter_CurrentInf
         holder.tv_name.setText(muc_data.getInfoName());
         holder.tv_value.setText(muc_data.getInfoValue());
         holder.standard.setText(muc_data.getInfoStandard());
-        /**子项的监听事件*/
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemClickListener.setOnItemClickListener(holder.itemView,position);//控件和条目下标
-            }
-        });
-        //holder的条目视图长按监听
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mOnLongClickListener.setOnLongClickListener(holder.itemView,position);
-                return false;
-            }
-        });
+//        /**子项的监听事件*/
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mOnItemClickListener.setOnItemClickListener(holder.itemView,position);//控件和条目下标
+//            }
+//        });
+//        //holder的条目视图长按监听
+//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                mOnLongClickListener.setOnLongClickListener(holder.itemView,position);
+//                return false;
+//            }
+//        });
     }
     /**这个方法用于告诉RecyclerView一共有多少个项，然后直接返回长度。*/
     @Override

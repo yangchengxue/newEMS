@@ -35,6 +35,7 @@ import com.example.ycx36.newems.view.activity.activity_phoneSet;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,18 +58,12 @@ public class fragment_Mine extends Fragment {
     @BindView(R.id.bt_signIn_Out) Button bt_signIn_Out;
 
     private View view;
+
     public View onCreateView(LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState){
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_mine, container, false);
             ButterKnife.bind(this,view);
-//            Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料
-//            t.setToNow(); // 取得系统时间。
-//            int year = t.year;
-//            int month = t.month;
-//            int date = t.monthDay;
-//            int hour = t.hour;
-//            int minute = t.minute;
-//            Log.d("jkliyhf",""+year+"-"+month+"-"+date+"   "+hour+":"+minute);
+
         }
         return view;
     }
@@ -135,12 +130,36 @@ public class fragment_Mine extends Fragment {
                 currentUsername.setText("未登录");
                 bt_signIn_Out.setText("未登录");
                 //存储信息
-                saveUserData("UID","uid","");
-                saveUserData("UPDATETIME","updatetime","");
-                saveUserData("MOTORSPEED","motorspeed","");
-                saveUserData("MOTOTTORQUE","motortorque","");
-                saveUserData("TOTALCURRENT","totalcurrent","");
-                saveUserData("TOTALVOLTAGE","totalvoltage","");
+                saveUserData("username","username","");
+                saveUserData("password","password","");
+                saveUserData("UID", "uid", ""); //设备车VIN码（唯一号）
+                saveUserData("UPDATETIME", "updatetime", ""); //更新时间
+                saveUserData("TOTALCURRENT", "totalcurrent", ""); //电流状态 1：正常 0：不正常
+                saveUserData("TOTALVOLTAGE", "totalvoltage", ""); //电压状态 1：正常 0：不正常
+                saveUserData("VEHICLESTATUS", "vehiclestatus", ""); //车辆状态
+                saveUserData("CHARGINGSTATE", "chargingstate", ""); //充电状态
+                saveUserData("MODEL", "model", ""); //运行模式
+                saveUserData("SPEED", "speed", ""); //车速
+                saveUserData("MILEAGE", "mileage", ""); //累计里程
+                saveUserData("VOLTAGE", "voltage", ""); //总电压
+                saveUserData("CURRENT", "current", ""); //总电流
+                saveUserData("AFTERCURRENT", "aftercurrent", ""); //剩余电流
+                saveUserData("QID", "qid",""); //驱动电机序号
+                saveUserData("TEMPERATURE", "temperature", ""); //驱动电机控制器温度
+                saveUserData("MOTORSPEED", "motorspeed", "");  //驱动电机转速
+                saveUserData("MOTOTTORQUE", "motortorque", "");  //驱动电机转矩
+                saveUserData("MOTORTEM", "motortem", ""); //驱动电机温度
+                saveUserData("MOTORVM", "motorvm", ""); //电机控制器输入电压
+                saveUserData("MOTORAM", "motoram", ""); //电机控制器直流母线电流
+                saveUserData("LONGITUDE", "longitude", ""); //经度
+                saveUserData("LATITUDE", "latitude", ""); //纬度
+                saveUserData("UNITVM", "Unitvm", ""); //最高单体电压
+                saveUserData("UNITID", "Unitid", ""); //最低单体电压序号
+                saveUserData("UNITVMLOW", "Unitvmlow", ""); //最低单体电压
+                saveUserData("UNITTEMID", "Unittemid", ""); //最高单体温度探针序号
+                saveUserData("UNITTEM", "Unittem", ""); //最高电池单体温度
+                saveUserData("UNITIDLOW", "Unitidlow", ""); //最低单体温度探针序号
+                saveUserData("UNITTEMLOW", "Unittemlow", ""); //最低电池单体温度
                 carVINTitle.setVisibility(View.GONE);
                 carVINValue.setVisibility(View.GONE);
             }
@@ -206,12 +225,14 @@ public class fragment_Mine extends Fragment {
     @SuppressLint("SetTextI18n")
     public void onResume() {
         super.onResume();
-        SharedPreferences pref = getActivity().getSharedPreferences("UID",MODE_PRIVATE);
-        String value = pref.getString("uid","");
+        SharedPreferences pref = Objects.requireNonNull(getActivity()).getSharedPreferences("username",MODE_PRIVATE);
+        String value = pref.getString("username","");
         if (!value.equals("")){
-            currentUsername.setText("admin");
+            currentUsername.setText(value);
             bt_signIn_Out.setText("退出登录");
-            carVINValue.setText(value);
+            SharedPreferences pref1 = Objects.requireNonNull(getActivity()).getSharedPreferences("UID",MODE_PRIVATE);
+            String vin = pref1.getString("uid","");
+            carVINValue.setText(vin);
             carVINTitle.setVisibility(View.VISIBLE);
             carVINValue.setVisibility(View.VISIBLE);
         }
