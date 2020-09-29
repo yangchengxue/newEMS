@@ -310,10 +310,10 @@ public class fragment_jiance extends Fragment {
         }
         String Unittemid = Objects.requireNonNull(getActivity()).getSharedPreferences("UNITTEMID",MODE_PRIVATE).getString("Unittemid","");
         if (!Unittemid.equals("")){
-            if (Double.parseDouble(Unittemid) >250 || Double.parseDouble(Unittemid) < 0){
+//            if (Double.parseDouble(Unittemid) >250 || Double.parseDouble(Unittemid) < 0){
                 //最高单体温度探针序号
                 flag_ifSafety_BMS = 1;
-            }
+//            }
         }else {
             flag_ifSafety_BMS = 1;
         }

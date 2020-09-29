@@ -13,11 +13,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@drawable/esmapp"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_config"
         android:theme="@style/mNoTitleStyle">
-        <activity android:name=".view.activity.activity_TrendAnalysis.activity_rcm"></activity>
+        <activity android:name=".view.activity.activity_from_carHistroy_bms"></activity>
+        <activity android:name=".view.activity.activity_carHistroy" />
+        <activity android:name=".view.activity.activity_TrendAnalysis.activity_rcm" />
         <activity android:name=".view.activity.activity_TrendAnalysis.activity_cpu" />
         <activity android:name=".view.activity.activity_TrendAnalysis.activity_mcu" />
         <activity android:name=".view.activity.activity_TrendAnalysis.activity_bms" />
@@ -47,6 +49,7 @@
         <activity android:name=".view.activity.activity_Register_phone" />
         <activity android:name=".view.activity.activity_Register_Vcode" />
         <activity android:name=".view.activity.activity_CurrentInformation" />
+        <activity android:name=".view.activity.DataChartActivity" />
     </application>
 
 </manifest>

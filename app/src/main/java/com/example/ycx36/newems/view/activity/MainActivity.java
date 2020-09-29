@@ -12,19 +12,30 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.ycx36.newems.R;
+import com.example.ycx36.newems.util.interface_retrofit;
 import com.example.ycx36.newems.view.fragment.fragment_CarStatus;
 import com.example.ycx36.newems.view.fragment.fragment_Discover;
 import com.example.ycx36.newems.view.fragment.fragment_Examination;
 import com.example.ycx36.newems.view.fragment.fragment_Mine;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +78,78 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         replaceFragment(fragmentManager,examination);
         requestPermissions();
+
+//        //测试okhttp
+//        OkHttpClient client = new OkHttpClient();
+//        Request request = new Request.Builder()
+//                .url("http://wwww.baidu.com")
+//                .build();
+//        final Call call =  client.newCall(request);
+//        //异步请求
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.d("请求 异步： "," 出现错误 :" + e.getMessage());
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                Log.d("请求 异步： "," " + response.body().toString());
+//            }
+//        });
+//
+//        //同步请求
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Response response = call.execute();
+//                    Log.d("请求 同步： "," " + response.body().toString());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+
+//        /**创建Retrofit对象*/
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://api.github.com/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        /**动态生成一个代理对象*/
+//        interface_retrofit githubService = retrofit.create(interface_retrofit.class);
+//        /**生成OkhttpCall的代理对象*/
+//        final Call<ResponseBody> call = githubService.searchRepoInfo("changmu175");
+
+
+        //同步请求
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Response<ResponseBody> response = call.execute();
+//                    Log.d("同步请求： "," " + response.body().toString());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+
+//        //异步请求方式
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                //请求成功回调
+//                Log.d("异步请求： "," " + response.body().toString());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                //请求与失败回调
+//            }
+//        });
+
+
     }
 
     /**替换fragment*/
@@ -126,5 +209,61 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void onResume() {
+        super.onResume();
+        // 目标对象
+        IUserDao target = new UserDao();
+        // 给目标对象，创建代理对象
+        IUserDao proxy = (IUserDao) new ProxyFactory(target).getProxyInstance();
+
+        proxy.save();
+        proxy.end();
+    }
+
+}
+
+/**接口*/
+interface IUserDao {
+    void save();
+    void end();
+}
+/**实现类*/
+class UserDao implements IUserDao {
+    @Override
+    public void save() {
+        Log.d("hahaha","----已经保存数据!----");
+    }
+
+    @Override
+    public void end() {
+        Log.d("hahaha","----已经结束!----");
+    }
+}
+/**代理类*/
+class ProxyFactory {
+    //维护一个目标对象
+    private Object target;
+    //构造函数
+    public ProxyFactory(Object target){
+        this.target=target;
+    }
+
+    //获取代理实例
+    public Object getProxyInstance(){
+        return Proxy.newProxyInstance(
+                target.getClass().getClassLoader(),
+                target.getClass().getInterfaces(),
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        Log.d("hahaha","开始事务2");
+                        //执行目标对象方法
+                        Object returnValue = method.invoke(target, args);
+                        Log.d("hahaha","提交事务2");
+                        return returnValue;
+                    }
+                });
     }
 }

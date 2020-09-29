@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.ycx36.newems.R;
 import com.example.ycx36.newems.view.activity.activity_FailureTrendAnalysis;
+import com.example.ycx36.newems.view.activity.activity_carHistroy;
 import com.example.ycx36.newems.view.activity.activity_fromDiscover;
 
 import butterknife.ButterKnife;
@@ -40,7 +41,7 @@ public class fragment_Discover extends Fragment {
                 toActivity("安全历史事件");
                 break;
             case R.id.RL_4:
-                toActivity("车辆历史分析");
+                toCarHistroyActivity();
                 break;
             case R.id.RL_5:
                 toActivity("安全事件处理方案");
@@ -56,4 +57,8 @@ public class fragment_Discover extends Fragment {
         startActivity(intent);
     }
 
+    public void toCarHistroyActivity(){
+        Intent intent = new Intent(getActivity(), activity_carHistroy.class);
+        startActivity(intent);
+    }
 }

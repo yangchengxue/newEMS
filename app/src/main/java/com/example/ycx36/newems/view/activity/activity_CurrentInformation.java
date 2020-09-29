@@ -1,6 +1,5 @@
 package com.example.ycx36.newems.view.activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,16 +7,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ycx36.newems.R;
 import com.example.ycx36.newems.recyclerview.adapter_CurrentInfo;
 import com.example.ycx36.newems.recyclerview.muc_data;
-import com.example.ycx36.newems.util.getCarAllBean;
 import com.example.ycx36.newems.util.getCarInfo;
 
 
@@ -53,47 +48,79 @@ public class activity_CurrentInformation extends AppCompatActivity {
         assert bundle != null;
         switch (Objects.requireNonNull(bundle.getString("FromWhich"))){
             case "1":
-                initdata_BMS();
+//                initdata_BMS();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            while(true){
+                                getCarInfo.getCarAllData_save(username, password);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mucData.clear();
+                                        initdata_BMS();
+                                    }
+                                });
+                                Thread.sleep(1000);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 break;
             case "2":
-                initdata_MCU();
+//                initdata_MCU();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            while(true){
+                                getCarInfo.getCarAllData_save(username, password);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mucData.clear();
+                                        initdata_MCU();
+                                    }
+                                });
+                                Thread.sleep(1000);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 break;
             case "3":
                 break;
             case "4":
-                initdata_VCU();
+//                initdata_VCU();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            while(true){
+                                getCarInfo.getCarAllData_save(username, password);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mucData.clear();
+                                        initdata_VCU();
+                                    }
+                                });
+                                Thread.sleep(1000);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 break;
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                    Thread.sleep(20000);
-                    getCarInfo.getCarAllData_save(username, password);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
     }
 
     private void initdata_BMS(){
@@ -137,8 +164,11 @@ public class activity_CurrentInformation extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());  //调用系统默认的删除增加item的动画
         adapter = new adapter_CurrentInfo(mucData); //获取适配器实例
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));  //调用系统横向分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));  //调用系统纵向分割线
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));  //调用系统横向分割线
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));  //调用系统纵向分割线
+        if (recyclerView.getItemDecorationCount() == 0) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        }
     }
 
     private void initdata_MCU(){
@@ -173,8 +203,11 @@ public class activity_CurrentInformation extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());  //调用系统默认的删除增加item的动画
         adapter = new adapter_CurrentInfo(mucData); //获取适配器实例
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));  //调用系统横向分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));  //调用系统纵向分割线
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));  //调用系统横向分割线
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));  //调用系统纵向分割线
+        if (recyclerView.getItemDecorationCount() == 0) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        }
     }
 
     private void initdata_VCU(){
@@ -205,8 +238,11 @@ public class activity_CurrentInformation extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());  //调用系统默认的删除增加item的动画
         adapter = new adapter_CurrentInfo(mucData); //获取适配器实例
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));  //调用系统横向分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));  //调用系统纵向分割线
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));  //调用系统横向分割线
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));  //调用系统纵向分割线
+        if (recyclerView.getItemDecorationCount() == 0) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        }
     }
 
     @OnClick({R.id.lin_header_back2})

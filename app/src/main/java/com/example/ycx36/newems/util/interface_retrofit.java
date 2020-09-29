@@ -1,6 +1,8 @@
 package com.example.ycx36.newems.util;
 
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -24,5 +26,10 @@ public interface interface_retrofit {
     @POST("/registerUser")
     Observable<regesterUserBean> regesterUser(
             @Body requestRegisterUserBean requestRegisterUserBean
+    );
+
+    @GET("users/{name}/repos")
+        Call<ResponseBody> searchRepoInfo(
+                @Path("name") String name
     );
 }
